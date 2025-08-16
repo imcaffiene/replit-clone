@@ -1,3 +1,4 @@
+import { signIn } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,47 +9,45 @@ import {
 } from "@/components/ui/card";
 import { ChromeIcon, GithubIcon } from "lucide-react";
 
+async function signInWithGoogle() {
+  "use server";
+  await signIn("google");
+}
+
+async function signInWithGithub() {
+  "use server";
+  await signIn("github");
+}
+
 export const SignInForm = () => {
   return (
-    <Card className='w-full max-w-sm mx-auto [&>*]:items-center'>
-      <CardHeader className='space-y-1 text-center'>
-        <CardTitle className='text-2xl font-bold'>Sign In</CardTitle>
-        <CardDescription>Choose Your Preferred Sign-in Method</CardDescription>
+    <Card className="w-full max-w-md">
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-2xl font-bold text-center">
+          Sign In
+        </CardTitle>
+
+        <CardDescription className="text-center">
+          Choose Your Preferred Sign-in Method
+        </CardDescription>
       </CardHeader>
 
-      <CardContent className='grid gap-4'>
-        <Button
-          variant='outline'
-          className='w-full'>
-          <ChromeIcon className='mr-2 h-4 w-4' />
-          <span>Sign in with Google</span>
-        </Button>
+      <CardContent className="grid gap-4">
+        <form action={signInWithGoogle}>
+          <Button className="w-full" variant={"outline"} type="submit">
+            <ChromeIcon className="mr-2 h-4 w-4" />
+            <span>Sign in with google</span>
+          </Button>
+        </form>
 
-        <Button
-          variant='outline'
-          className='w-full'>
-          <GithubIcon className='mr-2 h-4 w-4' />
-          <span>Sign in with Github</span>
-        </Button>
+        <form action={signInWithGithub}>
+          <Button className="w-full" variant={"outline"} type="submit">
+            <GithubIcon className="mr-2 h-4 w-4" />
+            <span>Sign in with Github</span>
+          </Button>
+        </form>
       </CardContent>
 
-      <div className='px-6 pb-6 text-center'>
-        <p className='text-xs text-muted-foreground'>
-          By signing in, you agree to our{" "}
-          <a
-            href='#'
-            className='underline underline-offset-4 hover:text-primary'>
-            Terms of Service
-          </a>{" "}
-          and{" "}
-          <a
-            href='#'
-            className='underline underline-offset-4 hover:text-primary'>
-            Privacy Policy
-          </a>
-          .
-        </p>
-      </div>
     </Card>
   );
 };

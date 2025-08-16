@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import UserButton from "@/features/auth/components/UserButton";
 
 export default function Home() {
   return (
     <div>
-      <Button variant={"outline"}>Hello</Button>
+      <UserButton />
     </div>
   );
 }

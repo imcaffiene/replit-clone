@@ -7,8 +7,8 @@ const SignInPage = () => {
       <Image
         src="/logo.svg"
         alt="Logo"
-        width={300}
-        height={300}
+        width={150}
+        height={150}
       />
       <SignInForm />
     </div>
