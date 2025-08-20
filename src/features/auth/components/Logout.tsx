@@ -1,3 +1,5 @@
+"use client";
+
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -6,7 +8,6 @@ interface LogoutProps {
 }
 
 export default function Logout({ children }: LogoutProps) {
-
   const router = useRouter();
 
   const handleLogout = async () => {
