@@ -13,19 +13,31 @@ enum UserRole {
   PREMIUM_USER
 }
 
+enum Templates {
+  REACTJS
+  NEXTJS
+  VUE
+  EXPRESS
+  HONO
+  ANGULAR
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
   email         String    @unique
   image         String?
   role          UserRole  @default(USER)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
   emailVerified DateTime? @map("email_verified")
-  accounts      Account[]
+
+  accounts           Account[]
+  myPlaygrounds      Playground[] @relation("UserPlaygrounds")
+  starredPlaygrounds Starmark[]   @relation("UserStarmarks")
+
+  @@map("users")
 }
-
-
 
 model Account {
   id                String  @id @default(cuid())
@@ -48,6 +60,7 @@ model Account {
 
   @@unique([provider, providerAccountId], name: "provider_providerAccountId")
   @@index([userId])
+  @@map("accounts")
 }
 
 model VerificationToken {
@@ -56,4 +69,40 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Playground {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  template    Templates @default(REACTJS)
+  userId      String    @map("user_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user      User       @relation("UserPlaygrounds", fields: [userId], references: [id], onDelete: Cascade)
+  starmarks Starmark[] @relation("PlaygroundStarmarks")
+
+  @@index([userId])
+  @@map("playgrounds")
+}
+
+model Starmark {
+  id           String  @id @default(cuid())
+  userId       String  @map("user_id")
+  playgroundId String  @map("playground_id")
+  isMarked     Boolean @default(true)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user       User       @relation("UserStarmarks", fields: [userId], references: [id], onDelete: Cascade)
+  playground Playground @relation("PlaygroundStarmarks", fields: [playgroundId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, playgroundId])
+  @@index([userId])
+  @@index([playgroundId])
+  @@map("starmarks")
 }
