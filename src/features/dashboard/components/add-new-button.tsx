@@ -4,17 +4,62 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { TemplateSelectionModal } from "./template-selection-modal";
+import TemplateSelectionModal from "./template-selection-modal";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { createPlayground } from "../actions";
 
 export const AddNewButton = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // select template data state
   const [selectedTemplate, setSelectedTemplate] = useState<{
     title: string;
     description?: string;
     template: "REACTJS" | "NEXTJS" | "VUE" | "EXPRESS" | "HONO" | "ANGULAR";
   } | null>(null);
+
+  const router = useRouter();
+
+  /**
+    * Handle form submission from template selection modal
+    * - Creates playground via server action
+    * - Handles success/error states with toast notifications
+    * - Navigates to created playground on success
+    * 
+    * @param data - Project configuration from modal
+    */
+  const handleSubmit = async (data: {
+    title: string;
+    template: "REACTJS" | "NEXTJS" | "EXPRESS" | "VUE" | "HONO" | "ANGULAR";
+    description?: string;
+  }) => {
+    try {
+      setSelectedTemplate(data);
+
+      toast.loading("Creating playground...");
+
+      const res = await createPlayground(data);
+
+      if (res.success && res.playground) {
+        toast.dismiss();
+        toast.success("Playground created successfully!");
+        console.log("Playground created successfully!", res.playground);
+
+        //close modal and navigate to playground
+        setIsModalOpen(false);
+        router.push(`/playground/${res.playground.id}`);
+      } else {
+        toast.dismiss();
+        toast.error(`Failed to create playground: ${res.error || "Unknown error"}`);
+      }
+    } catch (error) {
+      toast.dismiss();
+      toast.error("An unexpected error occurred");
+      console.error("Error creating playground:", error);
+    }
+  };
 
   return (
     <>
@@ -58,7 +103,7 @@ export const AddNewButton = () => {
       <TemplateSelectionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={() => { }}
+        onSubmit={handleSubmit}
       />
     </>
 

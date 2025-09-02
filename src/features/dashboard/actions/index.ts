@@ -40,12 +40,23 @@ export const createPlayground = async (
   }
 
   try {
+    const existingUser = await prisma.user.upsert({
+      where: { id: user.id },
+      update: {}, // don't update existing user
+      create: {
+        id: user.id,
+        name: user.name || "Anonymous User",
+        image: user.image,
+        email: user.email || `user-${user.id}@example.com`,
+      },
+    });
+
     const playground = await prisma.playground.create({
       data: {
         title: title.trim(),
         description: description?.trim() || "",
         template,
-        userId: user.id,
+        userId: existingUser.id,
       },
     });
 
