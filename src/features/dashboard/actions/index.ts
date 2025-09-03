@@ -9,6 +9,101 @@ import {
 } from "../types";
 import { revalidatePath } from "next/cache";
 
+/**
+ * Toggle starred/bookmarked status for a playground
+ *
+ * Uses upsert for atomic operations to prevent race conditions
+ * Handles both adding and removing bookmark status
+ *
+ * @param playgroundId - ID of the playground to toggle
+ * @param isChecked - New bookmark state (true = add, false = remove)
+ * @returns Promise with success status and current bookmark state
+ */
+
+export const toggleStarredMark = async (
+  playgroundId: string,
+  isChecked: boolean
+): Promise<{
+  success: boolean;
+  isMarked: boolean;
+  error?: string;
+}> => {
+  // get current authenticated user
+  const user = await currentUser();
+
+  if (!user || !user.id) {
+    return {
+      success: false,
+      isMarked: false,
+      error: "You must be logged in to toggle a playground star",
+    };
+  }
+
+  //Validate playgroundId format
+  if (
+    !playgroundId ||
+    typeof playgroundId !== "string" ||
+    playgroundId.trim().length === 0
+  ) {
+    return {
+      success: false,
+      isMarked: false,
+      error: "Invalid playground ID",
+    };
+  }
+
+  try {
+    if (isChecked) {
+      await prisma.starmark.upsert({
+        where: {
+          userId_playgroundId: {
+            userId: user.id,
+            playgroundId: playgroundId,
+          },
+        },
+        update: {
+          isMarked: true,
+        },
+        create: {
+          userId: user.id,
+          playgroundId: playgroundId,
+          isMarked: true,
+        },
+      });
+    } else {
+      await prisma.starmark.deleteMany({
+        where: {
+          userId: user.id,
+          playgroundId: playgroundId,
+        },
+      });
+    }
+
+    revalidatePath("/dashboard");
+
+    return {
+      success: true,
+      isMarked: isChecked,
+    };
+  } catch (error) {
+    console.error("Error toggling starred status:", error);
+
+    if (error instanceof Error) {
+      return {
+        success: false,
+        error: "Failed to toggle star: " + error.message,
+        isMarked: false,
+      };
+    }
+
+    return {
+      success: false,
+      error: "an unknown error occured",
+      isMarked: false,
+    };
+  }
+};
+
 export const createPlayground = async (
   data: CreatePlayground
 ): Promise<PlaygroundResult> => {

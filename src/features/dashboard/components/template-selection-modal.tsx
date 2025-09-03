@@ -355,8 +355,8 @@ const TemplateSelectionModal = ({
              * Modal header with title and description
              */}
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold text-[#e93f3f] flex items-center gap-2">
-                <Plus size={24} className="text-[#e93f3f]" />
+              <DialogTitle className="text-2xl font-bold text-[#006239] flex items-center gap-2">
+                <Plus size={24} className="text-[#006239]" />
                 Select a Template
               </DialogTitle>
 
@@ -431,8 +431,8 @@ const TemplateSelectionModal = ({
                         className={`relative flex p-6 border rounded-lg cursor-pointer
                           transition-all duration-300 hover:scale-[1.02]
                           ${selectedTemplate === template.id
-                            ? "border-[#E93F3F] shadow-[0_0_0_1px_#E93F3F,0_8px_20px_rgba(233,63,63,0.15)]"
-                            : "hover:border-[#E93F3F] shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)]"
+                            ? "border-[#006239] shadow-[0_0_0_1px_#E93F3F,0_8px_20px_rgba(233,63,63,0.15)]"
+                            : "hover:border-[#006239] shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)]"
                           }`}
                         onClick={() => handleSelectTemplate(template.id)}
                       >
@@ -449,7 +449,7 @@ const TemplateSelectionModal = ({
                          * Only shown when template is selected
                          */}
                         {selectedTemplate === template.id && (
-                          <div className="absolute top-2 left-2 bg-[#E93F3F] text-white rounded-full p-1">
+                          <div className="absolute top-2 left-2 bg-[#006239] text-white rounded-full p-1">
                             <Check size={14} />
                           </div>
                         )}
@@ -569,7 +569,7 @@ const TemplateSelectionModal = ({
                 </Button>
 
                 <Button
-                  className="bg-[#E93F3F] hover:bg-[#d03636]"
+                  className="bg-[#006239] hover:bg-[#006239]"
                   disabled={!selectedTemplate}
                   onClick={handleContinue}
                 >
@@ -585,7 +585,7 @@ const TemplateSelectionModal = ({
              * Header shows selected template context
              */}
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold text-[#e93f3f]">
+              <DialogTitle className="text-2xl font-bold text-[#006239]">
                 Configure Your Project
               </DialogTitle>
 
@@ -624,7 +624,7 @@ const TemplateSelectionModal = ({
                     .find((t) => t.id === selectedTemplate)
                     ?.features.map((feature) => (
                       <div key={feature} className="flex items-center gap-2">
-                        <Zap size={14} className="text-[#E93F3F]" />
+                        <Zap size={14} className="text-[#006239]" />
                         <span className="text-sm">{feature}</span>
                       </div>
                     ))}
@@ -642,7 +642,7 @@ const TemplateSelectionModal = ({
                 Back
               </Button>
               <Button
-                className="bg-[#E93F3F] hover:bg-[#d03636]"
+                className="bg-[#006239] hover:bg-[#006239]"
                 onClick={handleCreateProject}
               >
                 Create Project

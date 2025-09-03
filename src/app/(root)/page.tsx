@@ -14,7 +14,7 @@ export default function Home() {
           width={500}
         />
 
-        <h1 className=" z-20 text-6xl mt-5 font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-rose-500 via-red-500 to-pink-500 dark:from-rose-400 dark:via-red-400 dark:to-pink-400 tracking-tight leading-[1.3] ">
+        <h1 className=" z-20 text-6xl mt-5 font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-green-500 via-green-400 to-green-700 dark:from-green-400 dark:via-green-500 dark:to-green-700 tracking-tight leading-[1.3] ">
           Vibe Code With with Intelligence
         </h1>
 

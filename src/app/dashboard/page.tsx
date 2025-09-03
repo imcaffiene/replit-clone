@@ -10,15 +10,6 @@ import { AddRepoButton } from "@/features/dashboard/components/add-repo-button";
 import { ProjectTable } from "@/features/dashboard/components/project-table";
 import { toast } from "sonner";
 
-/**
- * Dashboard Page Component - Server Component with Client-Side Handlers
- * 
- * Architecture Pattern:
- * - Server Component for initial data fetching
- * - Client-side handlers for user interactions
- * - Proper error handling with toast notifications
- * - Type-safe integration with ProjectTable component
- */
 const DashboardPage = async () => {
 
   // ============================================
