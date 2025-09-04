@@ -38,4 +38,5 @@ export interface Project {
   userId: string;
   user: User;
   starmarks: { isMarked: boolean }[];
+  isBookmarkedByUser: boolean;
 }

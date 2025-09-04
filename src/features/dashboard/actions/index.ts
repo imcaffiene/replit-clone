@@ -9,26 +9,14 @@ import {
 } from "../types";
 import { revalidatePath } from "next/cache";
 
-/**
- * Toggle starred/bookmarked status for a playground
- *
- * Uses upsert for atomic operations to prevent race conditions
- * Handles both adding and removing bookmark status
- *
- * @param playgroundId - ID of the playground to toggle
- * @param isChecked - New bookmark state (true = add, false = remove)
- * @returns Promise with success status and current bookmark state
- */
-
-export const toggleStarredMark = async (
-  playgroundId: string,
-  isChecked: boolean
+// In your actions file
+export const toggleFavorite = async (
+  playgroundId: string
 ): Promise<{
   success: boolean;
   isMarked: boolean;
   error?: string;
 }> => {
-  // get current authenticated user
   const user = await currentUser();
 
   if (!user || !user.id) {
@@ -39,21 +27,20 @@ export const toggleStarredMark = async (
     };
   }
 
-  //Validate playgroundId format
-  if (
-    !playgroundId ||
-    typeof playgroundId !== "string" ||
-    playgroundId.trim().length === 0
-  ) {
-    return {
-      success: false,
-      isMarked: false,
-      error: "Invalid playground ID",
-    };
-  }
-
   try {
-    if (isChecked) {
+    // First get the current state
+    const existingMark = await prisma.starmark.findFirst({
+      where: {
+        userId: user.id,
+        playgroundId: playgroundId,
+      },
+    });
+
+    const currentState = existingMark?.isMarked || false;
+    const newState = !currentState;
+
+    // Toggle the state
+    if (newState) {
       await prisma.starmark.upsert({
         where: {
           userId_playgroundId: {
@@ -61,9 +48,7 @@ export const toggleStarredMark = async (
             playgroundId: playgroundId,
           },
         },
-        update: {
-          isMarked: true,
-        },
+        update: { isMarked: true },
         create: {
           userId: user.id,
           playgroundId: playgroundId,
@@ -83,22 +68,22 @@ export const toggleStarredMark = async (
 
     return {
       success: true,
-      isMarked: isChecked,
+      isMarked: newState,
     };
   } catch (error) {
-    console.error("Error toggling starred status:", error);
+    console.error("Error toggling favorite:", error);
 
     if (error instanceof Error) {
       return {
         success: false,
-        error: "Failed to toggle star: " + error.message,
+        error: "Failed to toggle favorite: " + error.message,
         isMarked: false,
       };
     }
 
     return {
       success: false,
-      error: "an unknown error occured",
+      error: "An unknown error occurred",
       isMarked: false,
     };
   }

@@ -21,7 +21,7 @@ import { StarIcon, StarOffIcon } from "lucide-react";
 import type React from "react";
 import { useState, useEffect, forwardRef } from "react";
 import { toast } from "sonner";
-import { toggleStarredMark } from "../actions";
+import { toggleFavorite } from "../actions";
 
 /**
  * Props interface extending Button component props
@@ -88,7 +88,7 @@ export const MarkedToggleButton = forwardRef<HTMLButtonElement, MarkedToggleButt
 
       try {
         // Call server action to persist bookmark state
-        const res = await toggleStarredMark(id, newMarkedState);
+        const res = await toggleFavorite(id,);
         const { success, error, isMarked: serverMarked } = res;
 
         if (success && !error) {
