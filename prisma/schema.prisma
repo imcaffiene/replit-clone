@@ -72,6 +72,20 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
+model TemplateFile {
+  id           String @id @default(cuid())
+  filename     String
+  content      String // This stores the JSON content
+  playgroundId String @unique @map("playground_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  playground Playground @relation(fields: [playgroundId], references: [id], onDelete: Cascade)
+
+  @@map("template_files")
+}
+
 model Playground {
   id          String    @id @default(cuid())
   title       String
@@ -84,6 +98,8 @@ model Playground {
 
   user      User       @relation("UserPlaygrounds", fields: [userId], references: [id], onDelete: Cascade)
   starmarks Starmark[] @relation("PlaygroundStarmarks")
+
+  templateFiles TemplateFile[]
 
   @@index([userId])
   @@map("playgrounds")

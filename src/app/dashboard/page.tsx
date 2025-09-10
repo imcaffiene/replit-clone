@@ -5,7 +5,7 @@ import {
   editProjectById,
   getPlaygroundForUser,
   toggleFavorite,
-} from "@/features/dashboard/actions";
+} from "@/features/dashboard/server";
 import { AddNewButton } from "@/features/dashboard/components/add-new-button";
 import { AddRepoButton } from "@/features/dashboard/components/add-repo-button";
 import { ProjectTable } from "@/features/dashboard/components/project-table";

@@ -21,7 +21,7 @@ import { StarIcon, StarOffIcon } from "lucide-react";
 import type React from "react";
 import { useState, useEffect, forwardRef } from "react";
 import { toast } from "sonner";
-import { toggleFavorite } from "../actions";
+import { toggleFavorite } from "../server";
 
 /**
  * Props interface extending Button component props

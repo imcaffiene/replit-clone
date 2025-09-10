@@ -1,6 +1,6 @@
 "use server";
 
-import { currentUser } from "@/features/auth/action";
+import { currentUser } from "@/features/auth/server";
 import prisma from "@/lib/db";
 import {
   CreatePlayground,

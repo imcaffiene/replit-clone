@@ -7,7 +7,7 @@ import { useState } from "react";
 import TemplateSelectionModal from "./template-selection-modal";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { createPlayground } from "../actions";
+import { createPlayground } from "../server";
 
 export const AddNewButton = () => {
 
